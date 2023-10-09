@@ -1,22 +1,37 @@
 <?php 
     session_start();
 
+    include_once "include/html_class.php";
+    include_once "include/controller/userContr.php";
+    
+    $userController = new AdminUserContr();
+
     if (!isset($_SESSION['GebruikerID'])) 
     {
-        include_once "include/view/login.php";
+        $userController->ToonLogin();
     } 
     else 
     {
-        echo "welkom gebruiker ".$_SESSION['GebruikerNaam']."!";
-        // session_unset();
-        // session_destroy();
-    }
-    ?>
+        generateHeader("Leden overzicht de Cuijt", function () {linkCSS("css/main.css");});
 
-    <footer>
-    <?php //Footer 
-    echo '@ '.date_create()->format('Y').' Copyright Sportclub de Cuijt';
-    ?>
-    </footer>
-</body>
-</html>
+        echo "welkom gebruiker ".$_SESSION['GebruikerNaam']."!";
+        $userController->ToonLoguit();
+
+        if (!isset($_GET['pagina']))
+        {
+            $_GET['pagina'] = "overzicht";
+        }
+
+        switch($_GET['pagina'])
+        {
+            case "overzicht":
+
+                break;
+                default:
+
+                echo "Pagina ".$_GET['pagina']." bestaat niet, er is iets misgegaan!";
+                break;
+        }
+    }
+    generateFooter();
+?>

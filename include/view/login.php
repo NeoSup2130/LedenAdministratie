@@ -1,29 +1,3 @@
-<?php
-$loginFout = false;
-    if(isset($_POST['gebruiker']) && isset($_POST['wachtwoord']))
-    {
-        include_once('include/basis.php');
-        $user = new AdminUserContr($_POST['gebruiker'], $_POST['wachtwoord']);
-        if ($user->LoginIn())
-        {
-            header("Refresh:0");
-        }
-        else 
-        {
-            $loginFout = true;
-        }
-    }
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/login.css">
-    <title>Ledenadministratie de Cuijt</title>
-</head>
-<body>
 <div class="container">
     <h2>Login</h2>
     <form action="index.php" method="post">
@@ -40,7 +14,8 @@ $loginFout = false;
         </div>
     </form>
 </div>
-<? if ($loginFout){ ?>
+<? // JavaScript om aan te geven dat de inloggevegens niet kloppen.
+    if ($loginFout){ ?>
     <script>
         let formObject = document.forms[0];
         let foutMelding = document.createElement("p");
