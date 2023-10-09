@@ -32,3 +32,7 @@
     border-radius: 5px;
     cursor: pointer;
 }
+
+.form-group .fout {
+    background-color: rgba(255, 0, 0, 0.50);
+}

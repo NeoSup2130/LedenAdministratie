@@ -1,9 +1,15 @@
 <?php 
     session_start();
 
-    if (!isset($_SESSION['gebruikerID'])) 
+    if (!isset($_SESSION['GebruikerID'])) 
     {
         include_once "include/view/login.php";
+    } 
+    else 
+    {
+        echo "welkom gebruiker ".$_SESSION['GebruikerNaam']."!";
+        // session_unset();
+        // session_destroy();
     }
     ?>
 
