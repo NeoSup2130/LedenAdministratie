@@ -13,7 +13,7 @@
     else 
     {
         generateHeader("Leden overzicht de Cuijt", function () {linkCSS("css/main.css");});
-
+        
         echo "welkom gebruiker ".$_SESSION['GebruikerNaam']."!";
         $userController->ToonLoguit();
 
@@ -25,7 +25,7 @@
         switch($_GET['pagina'])
         {
             case "overzicht":
-
+                include_once "include/view/contributieOverzicht.php";
                 break;
                 default:
 
