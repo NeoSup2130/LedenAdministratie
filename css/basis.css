@@ -19,3 +19,25 @@ img {
     height: auto;
 }
 /* eind reset stijl */
+
+.grid-container 
+{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 5px;
+    grid-row-gap: 5px;
+    grid-template-areas: 
+    "header header header header"
+    "nav content content content"
+    ;
+}
+     
+.grid-item 
+{
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+header { grid-area: header; }
+nav { grid-area: nav; }
+.content { grid-area: content; }
