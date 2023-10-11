@@ -14,9 +14,6 @@
     {
         generateHeader("Leden overzicht de Cuijt", function () {linkCSS("css/main.css");});
         
-        echo "welkom gebruiker ".$_SESSION['GebruikerNaam']."!";
-        $userController->ToonLoguit();
-
         if (!isset($_GET['pagina']))
         {
             $_GET['pagina'] = "overzicht";
@@ -25,7 +22,18 @@
         switch($_GET['pagina'])
         {
             case "overzicht":
+                include_once "include/model/overzichtModel.php";
                 include_once "include/view/contributieOverzicht.php";
+                break;
+                case "families":
+                include_once "include/controller/familieContr.php";
+                $familieController = new FamilieContr();
+                $familieController->invoke();
+                break;
+                case "leden":
+                include_once "include/controller/ledenContr.php";
+                $ledenController = new LedenContr();
+                $ledenController->invoke();
                 break;
                 default:
 

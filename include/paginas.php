@@ -4,17 +4,17 @@ class PaginaManager
 {
     protected $paginas = array();
 
-    protected function VoegPaginaToe($naam, $include)
+    protected function VoegPaginaToe($naam, $subpagina = [])
     {
-        $this->paginas[$naam] = $include;
+        $this->paginas[$naam] = $subpagina;
     }
 
     public function __construct()
     {
-        $this->VoegPaginaToe("overzicht", ['include/main.css']);
-        $this->VoegPaginaToe("families", ['include/main.css']);
-        $this->VoegPaginaToe("soorten sport", ['include/main.css']);
-        $this->VoegPaginaToe("staffels", ['include/main.css']);   
+        $this->VoegPaginaToe("overzicht");
+        $this->VoegPaginaToe("families", ['leden']);
+        $this->VoegPaginaToe("soorten sport");
+        $this->VoegPaginaToe("staffels");   
     }
     
     public function &GetPaginas()

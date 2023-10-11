@@ -1,9 +1,30 @@
-<!-- body is hier boven -->
+<? function toonBeginPagina($title) 
+{
+    ?>
+    <div class="grid-container">
+        <header class="grid-item">
+            <h1><?echo $title;?></h1>
+            <?
+            global $userController;
+            echo "Welkom gebruiker ".$_SESSION['GebruikerNaam']."!";
+            ?>
+        </header>
+        <nav class="grid-item">
+            <?generateNav();?>
+            <ul>
+                <li><?$userController->ToonLoguit();?></li>
+            </ul>
+        </nav>
+        <div class="content grid-item">
+            <!-- content tabel hier -->
+    <?
+}?>
 
-<header>
-    <h1>Leden administratie Sportclub de Cuijt</h1>
-</header>
-
-
-
-<!-- eind body is hier beneden -->
+<?function toonEindPagina()
+{
+    ?>
+        </div>
+    </div>
+    <?
+}
+?>

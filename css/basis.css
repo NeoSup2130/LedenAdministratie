@@ -23,13 +23,13 @@ img {
 .grid-container 
 {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: auto repeat(2, 1fr);
+    grid-template-rows: auto 1fr;
     grid-column-gap: 5px;
     grid-row-gap: 5px;
     grid-template-areas: 
-    "header header header header"
-    "nav content content content"
+    "header header header"
+    "nav content content"
     ;
 }
      

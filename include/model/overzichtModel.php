@@ -1,12 +1,7 @@
 <?php 
-include_once "include/basis.php";
-class overzichtModel extends Database
-{
-    public function __construct()
-    {
-        $this->database = 'sportclub de cuijt';
-    }
-    
+include_once "include/model/basisModel.php";
+class overzichtModel extends Model
+{ 
     public function HaalOverzicht() // families en contributies
     {
         $sql = "SELECT boekjaar.Jaar, families.Naam, COUNT(families.`LidID`) as `Aantal Personen`, SUM(contributie.Bedrag) as `Totaal bedrag` FROM "
@@ -22,17 +17,10 @@ class overzichtModel extends Database
         return false;
     }
 
-    public function ToonOverzicht()
+    public function toon()
     {
-        $query = $this->HaalOverzicht();
-        while ($row = $query->fetch())
-        {
-            echo 'Jaar: '.$row['Jaar'].' / ';
-            echo 'Familie Naam: '.$row['Naam'].' / ';
-            echo 'Aantal person: '.$row['Aantal Personen'].' / ';
-            echo 'Bedrag: '.$row['Totaal bedrag'];
-            echo '<br>';
-        }
+        $this->query = $this->HaalOverzicht();
+        $this->toonSimpel();
     } 
 }
 ?>

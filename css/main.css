@@ -10,8 +10,8 @@ footer {
     text-align: center;
 }
 
-header {
-    text-align: center;
+header > h1 {
+    margin: 0;
 }
 
 nav > ul {
@@ -22,9 +22,13 @@ nav > ul {
     list-style: none;
 }
 
-nav > ul > li{
+nav > ul li{
     width: max-content;
     margin-right: 1em;
+    margin-bottom: 0.5em;
+}
+nav > ul ul {
+    margin-left: 2em;
 }
 
 h1 {
@@ -50,4 +54,13 @@ th
 td 
 {
     background-color: aliceblue;
+}
+
+.btn {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }

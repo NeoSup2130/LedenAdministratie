@@ -23,5 +23,9 @@ class Database
         }
         return $conn;
     }
+    public function alertQueryError()
+    {
+        ?><script>window.alert("<?echo $_SESSION['PDO_ERROR']->getMessage()?>")</script> <?
+    }
 }
 ?>

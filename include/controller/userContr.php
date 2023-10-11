@@ -129,7 +129,7 @@ class AdminUserContr extends AdminUser
             }
         }   
         generateHeader("Inloggen administratie de Cuijt", function () {linkCSS("css/main.css"); linkCSS("css/login.css");});
-        include_once "include/view/login.php";
+        include_once "include/view/gebruiker/login.php";
     }
 
     public function ToonLoguit()
@@ -143,7 +143,7 @@ class AdminUserContr extends AdminUser
             }
         }
         generateHeader("Uitloggen de Cuijt", function () {linkCSS("css/main.css");});
-        include_once "include/view/loguit.php";
+        include_once "include/view/gebruiker/loguit.php";
     }
 }
 ?>
