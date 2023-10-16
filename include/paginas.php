@@ -12,9 +12,8 @@ class PaginaManager
     public function __construct()
     {
         $this->VoegPaginaToe("overzicht");
-        $this->VoegPaginaToe("families", ['leden']);
-        $this->VoegPaginaToe("soorten sport");
-        $this->VoegPaginaToe("staffels");   
+        $this->VoegPaginaToe("familie", ['familie leden']);
+        $this->VoegPaginaToe("contributie", ['soort leden', 'staffels']);
     }
     
     public function &GetPaginas()

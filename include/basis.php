@@ -27,5 +27,9 @@ class Database
     {
         ?><script>window.alert("<?echo $_SESSION['PDO_ERROR']->getMessage()?>")</script> <?
     }
+    public function alertError($error="test")
+    {
+        ?><script>window.alert("<?echo $error?>")</script> <?
+    }
 }
 ?>

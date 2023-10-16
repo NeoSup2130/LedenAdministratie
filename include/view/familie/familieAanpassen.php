@@ -14,9 +14,9 @@ $model = new familieModel;
                 </tr>
                 <tr>
                 <?
-                if (isset($_POST['familieID']) && is_numeric(htmlspecialchars($_POST['familieID'])))
+                if (isset($_GET['familieID']) && is_numeric(htmlspecialchars($_GET['familieID'])))
                 {
-                    $row = $model->haalFamilie($_POST['familieID'])->fetch();
+                    $row = $model->haalFamilie($_GET['familieID'])->fetch();
                     ?>
                     <td> 
                         <input type="text" name="Naam" id="Naam" value="<?echo $row['Naam']?>">
@@ -27,7 +27,7 @@ $model = new familieModel;
                     <td><?echo $row['Aangemaakt']?></td>
                     <td><?echo $row['Aangepast']?></td>
                         <input type="hidden" name="Aangepast" id="Aangepast">
-                        <input type="hidden" name="familieID" id="familieID" value="<?echo $_POST['familieID']?>">
+                        <input type="hidden" name="familieID" id="familieID" value="<?echo $_GET['familieID']?>">
                         <input type="hidden" name="methode" value="<?echo $_GET['methode']?>">
                     <?
                 }

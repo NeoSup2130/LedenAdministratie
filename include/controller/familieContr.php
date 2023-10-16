@@ -4,7 +4,6 @@ include_once "include/model/familieModel.php";
 
 class FamilieContr extends Database
 {
-
     public function invoke()
     {
         if(isset($_POST['methode']))
@@ -34,7 +33,11 @@ class FamilieContr extends Database
             switch($_GET['methode'])
             {
                 case "lid toevoegen":
-                    header('location: index.php?pagina=leden&familieID='.$_POST['familieID'].'&methode=toevoegen');
+                    header('location: index.php?pagina=familie+leden&familieID='.$_GET['familieID'].'&methode=toevoegen');
+                    exit;
+                break;
+                case "leden bekijken":
+                    header('location: index.php?pagina=familie+leden&familieID='.$_GET['familieID'].'');
                     exit;
                 break;
                 case "aanpassen":

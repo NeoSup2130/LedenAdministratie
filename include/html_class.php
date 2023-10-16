@@ -28,11 +28,25 @@ function generateList($selectie, $list = array())
         if ($name === $selectie)
             echo '<li>'.ucfirst($name).'</li>';
         
-        else // via een GET variable, pagina, bepaal ik wat voor pagina we weergeven om de database aan te passen.
-            echo '<li><a href=index.php?pagina='.$name.'>'.ucfirst($name).'</a></li>';  
+        else
+        { 
+            ?> 
+            <li>
+                <a <?echo ('href=index.php?pagina='.urlencode($name));?>> 
+                <?echo ucfirst($name);?>
+                </a>
+            </li>
+            <?
+        } // via een GET variable, pagina, bepaal ik wat voor pagina we weergeven om de database aan te passen.
+           
         
         if(is_array($list[$name]) && count($list[$name]) > 0) 
-            generateList($selectie, [$list[$name][0] => '']);
+        {
+            foreach($list[$name] as $subpagina)
+            {
+                generateList($selectie, [$subpagina => '']);
+            }
+        }
     }
     echo ' </ul>';
 }

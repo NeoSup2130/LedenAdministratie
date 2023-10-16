@@ -25,19 +25,32 @@ img {
     display: grid;
     grid-template-columns: auto repeat(2, 1fr);
     grid-template-rows: auto 1fr;
-    grid-column-gap: 5px;
-    grid-row-gap: 5px;
+    grid-column-gap: 2px;
+    grid-row-gap: 2px;
     grid-template-areas: 
     "header header header"
     "nav content content"
     ;
 }
-     
+
+.grid-container {
+    margin: 0 auto;
+    background-color: #000000;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+hr {
+    margin: 1em;
+    margin-left: 0;
+}
+
 .grid-item 
 {
-    border: 1px solid #ccc;
-    padding: 10px;
+    background-color: #fff;
+    padding: 2em; 
 }
+
 header { grid-area: header; }
 nav { grid-area: nav; }
 .content { grid-area: content; }

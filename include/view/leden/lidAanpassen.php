@@ -16,11 +16,11 @@ $model = new ledenModel;
                 </tr>
                 <tr>
                 <?
-                if (isset($_POST['LidID'])
-                && is_numeric(htmlspecialchars($_POST['LidID']))
-                && !empty($_POST['LidID']))
+                if (isset($_GET['LidID'])
+                && is_numeric(htmlspecialchars($_GET['LidID']))
+                && !empty($_GET['LidID']))
                 {
-                    $row = $model->haalLid($_POST['LidID'])->fetch();
+                    $row = $model->haalLid($_GET['LidID'])->fetch();
                     ?>
                     <td> 
                         <input type="text" name="Naam" id="Naam" value="<?echo $row['Naam']?>">
@@ -31,8 +31,8 @@ $model = new ledenModel;
                     </td>
                     <td><?echo $row['Adres']?></td>
                     <td><?echo $row['Aangemaakt']?></td>
-                    <input type="hidden" name="LidID" id="LidID" value="<?echo $_POST['LidID']?>">
-                    <input type="hidden" name="FamilieID" id="FamilieID" value="<?echo $_POST['FamilieID']?>">
+                    <input type="hidden" name="LidID" id="LidID" value="<?echo $row['LidID']?>">
+                    <input type="hidden" name="FamilieID" id="FamilieID" value="<?echo $row['FamilieID']?>">
                     <input type="hidden" name="methode" value="<?echo $_GET['methode']?>">
                     <?
                 }

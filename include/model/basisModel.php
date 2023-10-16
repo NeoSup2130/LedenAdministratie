@@ -37,15 +37,29 @@ abstract class Model extends Database
         }
     }
 
-    public function toonKnopCRUD($methode = 'verwijderen', $identifier = ['NAME', 'ID'])
+    public static function toonSimpelQuery($query)
     {
-        echo
-        ('<td><form action="index.php?pagina='.$_GET['pagina'].'&methode='.$methode.'" method="post">'); 
+        while ($row = $query->fetch())
+        {
+            echo '<tr>';
+            foreach($row as &$item)
+            {
+                echo '<td>'.$item.'</td>';
+            }
+            echo '</tr>';
+        }
+    }
+
+    public function toonKnopCRUD($methode = 'verwijderen', $identifier = ['NAME', 'ID'], $request='post')
+    {
+        echo '<td><form action="index.php" method="'.$request.'">'; 
+        echo '<input type="hidden" name="pagina" value='.urlencode($_GET['pagina']).'>';
+        echo '<input type="hidden" name="methode" value="'.$methode.'">';
         for($i = 0, $max = count($identifier); $i < $max; $i+=2) 
         {
             echo '<input type="hidden" name="'.$identifier[$i].'" value='.$identifier[$i + 1].'>';
         }
-        echo('<input type="submit" value="'.$methode.'" class="btn"></form></td>');
+        echo'<input type="submit" value="'.$methode.'" class="btn"></form></td>';
     }
 
     public function getTabelData()

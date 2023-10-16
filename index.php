@@ -19,21 +19,36 @@
             $_GET['pagina'] = "overzicht";
         }
 
-        switch($_GET['pagina'])
+        switch(urldecode($_GET['pagina']))
         {
             case "overzicht":
                 include_once "include/model/overzichtModel.php";
                 include_once "include/view/contributieOverzicht.php";
                 break;
-                case "families":
+                case "familie":
                 include_once "include/controller/familieContr.php";
                 $familieController = new FamilieContr();
                 $familieController->invoke();
                 break;
-                case "leden":
+                case "familie leden":
                 include_once "include/controller/ledenContr.php";
                 $ledenController = new LedenContr();
                 $ledenController->invoke();
+                break;
+                case "contributie": // weergeef boekjaar crud -> maak boekjaar creeert ook de correct staffels
+                include_once "include/controller/boekjaarContr.php";
+                $boekjaarController = new BoekjaarContr();
+                $boekjaarController->invoke();
+                break;
+                case "soort leden":
+                include_once "include/controller/soortLedenContr.php";
+                $soortController = new SoortLedenContr();
+                $soortController->invoke();
+                break;
+                case "staffels":
+                include_once "include/controller/staffelsContr.php";
+                $staffelsController = new StaffelsContr();
+                $staffelsController->invoke();
                 break;
                 default:
 

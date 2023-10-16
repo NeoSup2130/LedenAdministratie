@@ -4,30 +4,37 @@ class ledenModel extends Model
 { 
     public function haalLedenOverzicht()
     {
-        $sql = "SELECT FamilieID, LidID, `familie lid`.`Naam`, familie.Naam as Achternaam, `GeboorteDatum`, Adres, 
-        `familie lid`.Aangemaakt, `familie lid`.Aangepast 
-        FROM `familie lid` INNER JOIN familie WHERE `familie lid`.`FamilieID` = familie.ID;";
+        $sql = "SELECT FamilieID, LidID, `familie lid`.`Naam`, familie.Naam as Achternaam, `GeboorteDatum`, `soort lid`.Soort, Adres, `familie lid`.Aangemaakt, `familie lid`.Aangepast 
+        FROM `familie lid` JOIN familie on `familie lid`.`FamilieID` = familie.ID 
+        JOIN `soort lid` ON `soort lid`.ID = `familie lid`.SoortID
+        ORDER BY familie.Naam;";
         return $this->doQuery($sql);
     }
 
     public function haalLid($id) 
     {
-        $sql = "SELECT FamilieID, LidID, `familie lid`.`Naam`, familie.Naam as Achternaam, `GeboorteDatum`, Adres, 
+        $sql = "SELECT FamilieID, LidID, `familie lid`.`Naam`, familie.Naam as Achternaam, `GeboorteDatum`, `soort lid`.`Soort`, Adres, 
         `familie lid`.Aangemaakt, `familie lid`.Aangepast 
-        FROM `familie lid` INNER JOIN familie WHERE `familie lid`.`LidID`=?;";
+        FROM `familie lid` JOIN familie on `familie lid`.`FamilieID` = familie.ID 
+        JOIN `soort lid` ON `soort lid`.`ID` = `familie lid`.`SoortID`
+        WHERE LidID=?";
         return $this->doQuery($sql, [$id]);
     }
 
     public function haalLedenFamilie($familieID)
     {
-        $sql = "SELECT * FROM `familie lid` WHERE FamilieID=?;";
+        $sql = "SELECT FamilieID, LidID, `familie lid`.`Naam`, familie.Naam as Achternaam, `GeboorteDatum`, `soort lid`.`Soort`, Adres, 
+        `familie lid`.Aangemaakt, `familie lid`.Aangepast 
+        FROM `familie lid` JOIN familie on `familie lid`.`FamilieID` = familie.ID 
+        JOIN `soort lid` ON `soort lid`.`ID` = `familie lid`.`SoortID`
+        WHERE FamilieID=? ORDER BY `familie lid`.`Naam`;";
         return $this->doQuery($sql, [$familieID]);
     }
 
-    public function toevoegenLid($familieID, $naam, $geboortedatum) 
+    public function toevoegenLid($familieID, $naam, $soortID, $geboortedatum) 
     {
-        $sql = "INSERT INTO `familie lid` (FamilieID, Naam, GeboorteDatum) VALUES (?, ?, ?)";
-        return $this->doQuery($sql, [$familieID, $naam, $geboortedatum]);
+        $sql = "INSERT INTO `familie lid` (FamilieID, Naam, SoortID, GeboorteDatum) VALUES (?, ?, ?, ?)";
+        return $this->doQuery($sql, [$familieID, $naam, $soortID, $geboortedatum]);
     }
 
     public function aanpassenLid($id, $familieID, $naam, $geboortedatum) 
@@ -61,8 +68,8 @@ class ledenModel extends Model
                 } 
                 else echo '<td>'.$item.'</td>';
             }
-            $this->toonKnopCRUD("aanpassen", $ids);
-            $this->toonKnopCRUD("verwijderen", $ids);
+            $this->toonKnopCRUD("aanpassen", $ids, "get");
+            $this->toonKnopCRUD("verwijderen", $ids, "get");
         echo '</tr>';
         }
     } 
