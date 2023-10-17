@@ -1,6 +1,7 @@
 <?php 
 require_once "include/basis.php";
 
+// AdminUser is het model dat gegevens van de gebruiker kan ophalen en veranderen.
 class AdminUser extends Database
 {
     public $gebruiker;
@@ -24,6 +25,18 @@ class AdminUser extends Database
             $this->gebruiker = $gebruiker;
             $this->wachtwoord = $wachtwoord;    
         }
+    }
+
+    protected function GetCookie($cookie) 
+    {
+        $sql = 'SELECT ID, GebruikersNaam, Wachtwoord, AuthCode FROM gebruikers WHERE AuthCode=?';
+        $stmt = $this->connect()->prepare($sql);
+
+        if ($stmt->execute([$cookie])) 
+        {
+            return $stmt->fetch();
+        }
+        return false;   
     }
 
     public function GetUser()
@@ -80,27 +93,45 @@ class AdminUser extends Database
         return false;
     }
 }
-
+/* 
+AdminUserContr is de gebruiker controller die verantwoordelijkheid neemt van 
+handelingen rondom authorisatie (login, loguit) 
+*/
 class AdminUserContr extends AdminUser
 {
-    protected function LoginIn()
+    protected function DoLogin($query)  
+    {
+        $this->id = $query['ID'];
+        $this->SetAuthCode();
+        $_SESSION['GebruikerID'] = $this->id;
+        $_SESSION['GebruikerNaam'] = $this->gebruiker;
+    }
+
+    protected function CookieLogin()
+    {
+        if (isset($_COOKIE["AuthCode"]))
+        {
+            $cookie = $_COOKIE['AuthCode'];
+            if ($query = $this->GetCookie($cookie))
+            {
+                $this->DoLogin($query);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected function FormLogin()
     {
         if ($query = $this->GetUser())
         {
-            if ($this->gebruiker === $query['GebruikersNaam'] && password_verify($this->wachtwoord, $query['Wachtwoord'])
-                || isset($_COOKIE["AuthCode"]) && $_COOKIE["AuthCode"] === $query['AuthCode'])
+            if ($this->gebruiker === $query['GebruikersNaam'] && password_verify($this->wachtwoord, $query['Wachtwoord']))
             {
-                $this->id = $query['ID'];
-                $this->SetAuthCode();
+                $this->DoLogin($query);
+                return true;
             }
-            $_SESSION['GebruikerID'] = $this->id;
-            $_SESSION['GebruikerNaam'] = $this->gebruiker;
-            return true;
         }
-        else 
-        {
-            return false;
-        }
+        return false;
     }
     protected function LogOut()
     {
@@ -114,12 +145,12 @@ class AdminUserContr extends AdminUser
     public function ToonLogin()
     {
         $loginFout = false;
-        
+
         if(isset($_POST['gebruiker']) && isset($_POST['wachtwoord']))
         {
             $this->Init($_POST['gebruiker'], $_POST['wachtwoord']); 
 
-            if ($this->LoginIn())
+            if ($this->FormLogin())
             {
                 header("Refresh:0");
             }
@@ -127,6 +158,11 @@ class AdminUserContr extends AdminUser
             {
                 $loginFout = true;
             }
+        } 
+        else if($this->CookieLogin())
+        {
+            header("Refresh:0");
+            exit;
         }   
         generateHeader("Inloggen administratie de Cuijt", function () {linkCSS("css/main.css"); linkCSS("css/login.css");});
         include_once "include/view/gebruiker/login.php";

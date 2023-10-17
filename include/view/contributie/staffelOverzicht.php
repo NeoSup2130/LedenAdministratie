@@ -55,9 +55,6 @@ $model = new StaffelsModel;
             <td><input type="submit" value="toevoegen" class="btn"></td>
             </form>
         </tr>
-        <?
-        // $model->toon();
-        ?>
     </tbody>
 <table>
 <hr>

@@ -1,10 +1,13 @@
 <?php 
-require_once "include/basis.php";
+require_once "include/controller/basisContr.php";
 include_once "include/model/familieModel.php";
 
-class FamilieContr extends Database
+// FamilieContr heeft verantwoordelijkheid over het weergeven van de familie view en het handelen van client input.
+// Rondom de volgende tabel Familie
+class FamilieContr extends Controller
 {
-    public function invoke()
+
+    protected function handelPOST()
     {
         if(isset($_POST['methode']))
         {
@@ -12,22 +15,46 @@ class FamilieContr extends Database
             switch($_POST['methode'])
             {
                 case "toevoegen":
-                    $adres = $_POST['Postcode'].', '.$_POST['Straat'].' '.$_POST['Huisnummer'];
-                    if (!$model->toevoegenFamilie($_POST['Naam'], $adres))
-                    $this->alertQueryError();
+                    $filter = new Validator();
+                    $filter->AddFilter('Naam', familieModel::haalRegex('Naam'));
+                    $filter->AddFilter('Postcode', familieModel::haalRegex('Postcode'));
+                    $filter->AddFilter('Straat', familieModel::haalRegex('Straat'));
+                    $filter->AddFilter('Huisnummer', familieModel::haalRegex('Huisnummer'));
+                    $data = $filter->Validate();
+                    if(!$data) break;                    
+                    $adres = $data['Postcode'].', '.$data['Straat'].' '.$data['Huisnummer'];
+                    if (!$model->toevoegenFamilie($data['Naam'], $adres))
+                    alertQueryError();
                 break;
                 case "aanpassen":
-                    if (!$model->aanpassenFamilie($_POST['familieID'], $_POST['Naam'], $_POST['Adres']))
-                    $this->alertQueryError();
+                    if ($this->ValideerID([$_POST['FamilieID']]))
+                    {
+                        $filter = new Validator();
+                        $filter->AddFilter('Naam', familieModel::haalRegex('Naam'));
+                        $filter->AddFilter('Postcode', familieModel::haalRegex('Postcode'));
+                        $filter->AddFilter('Straat', familieModel::haalRegex('Straat'));
+                        $filter->AddFilter('Huisnummer', familieModel::haalRegex('Huisnummer'));
+                        $data = $filter->Validate();
+                        if(!$data) break;                    
+                        $adres = $data['Postcode'].', '.$data['Straat'].' '.$data['Huisnummer'];
+                        if (!$model->aanpassenFamilie($_POST['familieID'], $data['Naam'], $adres))
+                        alertQueryError();
+                    }
                 break;
                 case "verwijderen":
-                    if (!$model->verwijderFamilie($_POST['familieID']))
-                    $this->alertQueryError();
+                    if ($this->ValideerID([$_POST['FamilieID']]))
+                    {
+                        if (!$model->verwijderFamilie($_POST['familieID']))
+                        alertQueryError();
+                    }
                 break;
             }
             header('refresh:0');
         }
+    }
 
+    protected function handelGET()
+    {
         if(isset($_GET['methode']))
         {
             switch($_GET['methode'])
@@ -46,9 +73,13 @@ class FamilieContr extends Database
                 case "verwijderen":
                     include_once "include/view/familie/familieVerwijderen.php";
                 break;
+                default:
+                return false;
+                break;
             }
+            return true;
         } 
-        else $this->toonAlles();
+        return false;
     }
 
     protected function toonAlles()

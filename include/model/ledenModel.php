@@ -37,16 +37,25 @@ class ledenModel extends Model
         return $this->doQuery($sql, [$familieID, $naam, $soortID, $geboortedatum]);
     }
 
-    public function aanpassenLid($id, $familieID, $naam, $geboortedatum) 
+    public function aanpassenLid($id, $familieID, $naam, $soortID, $geboortedatum) 
     {
-        $sql = "UPDATE `familie lid` SET FamilieID=?, Naam=?, GeboorteDatum=?, Aangepast=CURRENT_TIMESTAMP WHERE `familie lid`.`LidID`=?";
-        return $this->doQuery($sql, [$familieID, $naam, $geboortedatum, $id]);
+        $sql = "UPDATE `familie lid` SET FamilieID=?, Naam=?, SoortID=?, GeboorteDatum=?, Aangepast=CURRENT_TIMESTAMP WHERE `familie lid`.`LidID`=?";
+        return $this->doQuery($sql, [$familieID, $naam, $soortID, $geboortedatum, $id]);
     }
 
     public function verwijderLid($ID) 
     {
         $sql = "DELETE FROM `familie lid` WHERE LidID=?";
         return $this->doQuery($sql, [$ID]);
+    }
+
+    public static function haalRegex($key)
+    {
+        switch($key)
+        {
+            case "Naam": return "/^(?!^\s+$)[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/"; break;
+            case "GeboorteDatum": return "/^(0[1-9]|[12][0-9]|3[01])\\/(0[1-9]|1[0-2])\\/\d{4}$/"; break;
+        }
     }
 
     public function toon()

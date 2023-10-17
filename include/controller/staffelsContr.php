@@ -1,24 +1,46 @@
 <?php 
-require_once "include/basis.php";
+require_once "include/controller/basisContr.php";
 include_once "include/model/staffelsModel.php";
+include_once "include/model/boekjaarModel.php";
+include_once "include/model/soortModel.php";
 
-class StaffelsContr extends Database
+// StaffelsContr heeft verantwoordelijkheid over het weergeven van de view en het handelen van client input.
+// Rondom de volgende tabel Contributie
+class StaffelsContr extends Controller
 {
+    protected function isEmptySoortID()
+    {
+        $soortModel = new SoortModel;
+        return empty($soortModel->haalSoort($_POST['SoortID'])->fetch());
+    }
+
+    protected function isEmptyBoekID()
+    {
+        $boekjaarModel = new BoekjaarModel;
+        return empty($boekjaarModel->haalBoekjaar($_POST['BoekID'])->fetch());
+    }
+
     protected function controleerToevoeging()  
     {
         $staffelModel = new StaffelsModel;
         try {
-            if ($stmt = $staffelModel->haalBoekJaarStaffel($_POST['BoekID'], $_POST['SoortID']))
+            if($this->isEmptySoortID() || $this->isEmptyBoekID())
             {
+                throw new Exception ("Meegegeven informatie bestaat niet.");
+            }
+            if(empty($staffelModel->haalBoekJaarStaffel($_POST['SoortID'], $_POST['BoekID'])->fetch())) 
+            {
+                return true;
+            }
+            else 
+            {   
                 $string = 'Uw toevoeging met BoekID='.$_POST['BoekID'].', SoortID='.$_POST['SoortID'].', Leeftijd='.$_POST['Leeftijd'].' bestaat al!';
                 throw new Exception ($string);
             } 
-            else return true;
         } catch (Exception $e) {
             $_SESSION['PDO_ERROR'] = $e;
             return false;
         }
-        return true;
     }
 
     protected function handelPOST()
@@ -29,25 +51,46 @@ class StaffelsContr extends Database
             switch($_POST['methode'])
             {
                 case "toevoegen":
-                    if ($this->controleerToevoeging()) 
+                    if ($this->ValideerID([$_POST['BoekID'], $_POST['SoortID']]))
                     {
-                        if (!$staffelModel->toevoegenStaffel($_POST['BoekID'], $_POST['SoortID'], $_POST['Leeftijd'], $_POST['Korting'], $_POST['BasisBedrag']))
-                        $this->alertQueryError();
-                    } 
-                    else $this->alertQueryError();
+                        $filter = new Validator();
+                        $filter->AddFilter('Leeftijd', StaffelsModel::haalRegex('Leeftijd'));
+                        $filter->AddFilter('Korting', StaffelsModel::haalRegex('Korting'));
+                        $filter->AddFilter('Bedrag', BoekjaarModel::haalRegex('Bedrag'));
+                        $data = $filter->Validate();
+                        if(!$data) break;
+                        if ($this->controleerToevoeging()) 
+                        {
+                            if (!$staffelModel->toevoegenStaffel($_POST['BoekID'], $_POST['SoortID'], $data['Leeftijd'], $data['Korting'], $data['BasisBedrag']))
+                            alertQueryError();
+                        } 
+                        else alertQueryError();
+                    }
                 break;
                 case "aanpassen":
-                    if (!$staffelModel->aanpassenStaffel($_POST['ID'], $_POST['BoekID'], $_POST['SoortID'], $_POST['Leeftijd'], $_POST['Korting'], $_POST['Bedrag']))
-                    $this->alertQueryError();
+                    if ($this->ValideerID([$_POST['ID'], $_POST['BoekID'], $_POST['SoortID']]))
+                    {
+                        if($this->isEmptySoortID() || $this->isEmptyBoekID()) break;
+                        $filter = new Validator();
+                        $filter->AddFilter('Leeftijd', StaffelsModel::haalRegex('Leeftijd'));
+                        $filter->AddFilter('Korting', StaffelsModel::haalRegex('Korting'));
+                        $filter->AddFilter('Bedrag', BoekjaarModel::haalRegex('BasisBedrag'));
+                        $data = $filter->Validate();
+                        if(!$data) break;
+                        if (!$staffelModel->aanpassenStaffel($_POST['ID'], $_POST['BoekID'], $_POST['SoortID'], $data['Leeftijd'], $data['Korting'], $data['Bedrag']))
+                        alertQueryError();
+                    }
                 break;
                 case "verwijderen":
-                    if (!$staffelModel->verwijderStaffel($_POST['StaffelID']))
-                    $this->alertQueryError();
+                    if ($this->ValideerID([$_POST['StaffelID']]))
+                    {
+                        if (!$staffelModel->verwijderStaffel($_POST['StaffelID']))
+                        alertQueryError();
+                    }
                 break;
             }
             header('refresh:0');
         }
-        else echo "holdup";
     }
 
     public function handelGET()
@@ -69,26 +112,6 @@ class StaffelsContr extends Database
             return true;
         } 
         return false;
-    }
-
-    public function invoke()
-    {
-        if(isset($_SERVER['REQUEST_METHOD']))
-        {
-            switch($_SERVER['REQUEST_METHOD'])
-            {
-                case 'POST': 
-                    $this->handelPOST();
-                    break;
-                    case 'GET':
-                        if (!$this->handelGET())
-                            $this->toonAlles(); 
-                        break;
-                default:
-                var_dump($_SERVER['REQUEST_METHOD']);
-                    break;
-            }
-        } 
     }
 
     protected function toonAlles()

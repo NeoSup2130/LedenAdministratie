@@ -1,8 +1,10 @@
 <?php 
-require_once "include/basis.php";
+require_once "include/controller/basisContr.php";
 include_once "include/model/soortModel.php";
 
-class SoortLedenContr extends Database
+// SoortLedenContr heeft verantwoordelijkheid over het weergeven van de view en het handelen van client input.
+// Rondom het tabel Soort Leden
+class SoortLedenContr extends Controller
 {
     protected function handelPOST()
     {
@@ -12,16 +14,33 @@ class SoortLedenContr extends Database
             switch($_POST['methode'])
             {
                 case "toevoegen":
-                    if (!$model->toevoegenSoort($_POST['SoortNaam']))
-                    $this->alertQueryError();
+                    $filter = new Validator();
+                    $filter->AddFilter('SoortNaam', SoortModel::haalRegex('Soort'));
+                    $data = $filter->Validate();
+                    if(!$data) break;
+
+                    if (!$model->toevoegenSoort($data['SoortNaam']))
+                    alertQueryError();
                 break;
                 case "aanpassen":
-                    if (!$model->aanpassenSoort($_POST['SoortID'], $_POST['SoortNaam']))
-                    $this->alertQueryError();
+                    if ($this->ValideerID([$_POST['SoortID']]))
+                    {
+                        $filter = new Validator();
+                        $filter->AddFilter('SoortNaam', SoortModel::haalRegex('Soort'));
+                        $data = $filter->Validate();
+                        if(!$data) break;
+
+                        if (!$model->aanpassenSoort($_POST['SoortID'], $_POST['SoortNaam']))
+                            alertQueryError();
+                    }
+                    
                 break;
                 case "verwijderen":
-                    if (!$model->verwijderSoort($_POST['SoortID']))
-                    $this->alertQueryError();
+                    if ($this->ValideerID([$_POST['SoortID']]))
+                    {
+                        if (!$model->verwijderSoort($_POST['SoortID']))
+                        alertQueryError();
+                    }
                 break;
             }
             header('refresh:0');
@@ -44,26 +63,6 @@ class SoortLedenContr extends Database
             return true;
         } 
         return false;
-    }
-
-    public function invoke()
-    {
-        if(isset($_SERVER['REQUEST_METHOD']))
-        {
-            switch($_SERVER['REQUEST_METHOD'])
-            {
-                case 'POST': 
-                    $this->handelPOST();
-                    break;
-                    case 'GET':
-                        if (!$this->handelGET())
-                            $this->toonAlles(); 
-                        break;
-                default:
-                var_dump($_SERVER['REQUEST_METHOD']);
-                    break;
-            }
-        } 
     }
 
     protected function toonAlles()

@@ -19,6 +19,11 @@ $model = new familieModel;
                 if (isset($_GET['familieID']) && is_numeric(htmlspecialchars($_GET['familieID'])))
                 {
                     $row = $model->haalFamilie($_GET['familieID'])->fetch();
+                    if(!$row) 
+                    {
+                        alertError("Meegegeven ID is niet geldig!");
+                        exit;
+                    }
                     ?>
                     <td><?echo $row['Naam']?></td>
                     <td><?echo $row['Adres']?></td>

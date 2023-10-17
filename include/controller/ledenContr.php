@@ -1,9 +1,11 @@
 <?php 
-require_once "include/basis.php";
+require_once "include/controller/basisContr.php";
 include_once "include/model/ledenModel.php";
 include_once "include/model/contributieModel.php";
 
-class LedenContr extends Database
+// LedenContr heeft verantwoordelijkheid over het weergeven van de familie leden view en het handelen van client input.
+// Rondom de volgende tabel Familie leden
+class LedenContr extends Controller
 {
     protected function bepaalSoortLid($geboorteJaar)
     {
@@ -36,29 +38,54 @@ class LedenContr extends Database
             switch($_POST['methode'])
             {
                 case "toevoegen":
-                    // geboortedatum komt binnen als 01/01/2001
-                    $geboortedatum = explode('/', $_POST['GeboorteDatum']);
-                    // geboortedatum[2] is jaar
-                    $soortID = $this->bepaalSoortLid($geboortedatum[2]);
+                    if ($this->ValideerID([$_POST['FamilieID']]))
+                    {
+                        $filter = new Validator();
+                        $filter->AddFilter('Naam', ledenModel::haalRegex('Naam'));
+                        $filter->AddFilter('GeboorteDatum', ledenModel::haalRegex('GeboorteDatum'));
+                        $data = $filter->Validate();
+                        if(!$data) break;
+                        // geboortedatum komt binnen als 01/01/2001
+                        $geboortedatum = explode('/', $data['GeboorteDatum']);
+                        // geboortedatum[2] is jaar
+                        $soortID = $this->bepaalSoortLid($geboortedatum[2]);
+                        $geboortedatum = $geboortedatum[2].'-'.$geboortedatum[1].'-'.$geboortedatum[0];
 
-                    $geboortedatum = $geboortedatum[2].'-'.$geboortedatum[1].'-'.$geboortedatum[0];
-                    if (!$model->toevoegenLid($_POST['FamilieID'], $_POST['Naam'], $soortID, $geboortedatum))
-                    $this->alertQueryError();
+                        if (!$model->toevoegenLid($_POST['FamilieID'], $data['Naam'], $soortID, $geboortedatum))
+                            alertQueryError();
+                    }
                 break;
                 case "aanpassen":
-                    if (!$model->aanpassenLid($_POST['LidID'], $_POST['FamilieID'], $_POST['Naam'], $_POST['GeboorteDatum']))
-                    $this->alertQueryError();
+                    if ($this->ValideerID([$_POST['LidID'], $_POST['FamilieID']]))
+                    {
+                        $filter = new Validator();
+                        $filter->AddFilter('Naam', ledenModel::haalRegex('Naam'));
+                        $filter->AddFilter('GeboorteDatum', ledenModel::haalRegex('GeboorteDatum'));
+                        $data = $filter->Validate();
+                        if(!$data) break;
+                        // geboortedatum komt binnen als 01/01/2001
+                        $geboortedatum = explode('/', $data['GeboorteDatum']);
+                        // geboortedatum[2] is jaar
+                        $soortID = $this->bepaalSoortLid($geboortedatum[2]);
+                        $geboortedatum = $geboortedatum[2].'-'.$geboortedatum[1].'-'.$geboortedatum[0];
+
+                        if (!$model->aanpassenLid($_POST['LidID'], $_POST['FamilieID'], $data['Naam'], $soortID, $geboortedatum))
+                            alertQueryError();
+                    }
                 break;
                 case "verwijderen":
-                    if (!$model->verwijderLid($_POST['LidID']))
-                    $this->alertQueryError();
+                    if ($this->ValideerID([$_POST['LidID']]))
+                    {
+                        if (!$model->verwijderLid($_POST['LidID']))
+                        alertQueryError();
+                    }
                 break;
             }
             header('refresh:0');
         }
     }
 
-    public function handelGET()
+    protected function handelGET()
     {
         if(isset($_GET['methode']))
         {
@@ -73,6 +100,10 @@ class LedenContr extends Database
                 case "verwijderen":
                     include_once "include/view/leden/lidVerwijderen.php";
                 break;
+                default:
+                    return false;
+                break;
+
             }
             return true;
         } 
@@ -82,26 +113,6 @@ class LedenContr extends Database
             return true;
         } 
         return false;
-    }
-
-    public function invoke()
-    {
-        if(isset($_SERVER['REQUEST_METHOD']))
-        {
-            switch($_SERVER['REQUEST_METHOD'])
-            {
-                case 'POST': 
-                    $this->handelPOST();
-                    break;
-                    case 'GET':
-                        if (!$this->handelGET())
-                            $this->toonAlles(); 
-                        break;
-                default:
-                var_dump($_SERVER['REQUEST_METHOD']);
-                    break;
-            }
-        } 
     }
 
     protected function toonAlles()

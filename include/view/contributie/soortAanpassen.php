@@ -16,6 +16,11 @@ $model = new SoortModel;
                 if (isset($_GET['SoortID']) && is_numeric(htmlspecialchars($_GET['SoortID'])))
                 {
                     $row = $model->haalSoort($_GET['SoortID'])->fetch();
+                    if(!$row) 
+                    {
+                        alertError("Meegegeven ID is niet geldig!");
+                        exit;
+                    }
                     ?>
                     <td> 
                         <?echo $row['ID']?>

@@ -42,6 +42,17 @@ class familieModel extends Model
         return $this->doQuery($sql, [$ID]);
     }
 
+    public static function haalRegex($key)
+    {
+        switch($key)
+        {
+            case "Naam": return "/^(?!^\s+$)[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/"; break;
+            case "Postcode": return "/^[1-9]\d{3}[A-Z]{2}$/"; break;
+            case "Straat": return "/^[A-Za-z\s-]+$/"; break;
+            case "Huisnummer": return "/^[1-9]\d*\w?$/"; break;
+        }
+    }
+
     public function toon()
     {
         $this->query = $this->haalFamilies();

@@ -33,6 +33,14 @@ class SoortModel extends Model
 
     }
 
+    public static function haalRegex($key)
+    {
+        switch($key)
+        {
+            case "Soort": return "/^(?!^\s+$)[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/"; break;
+        }
+    }
+
     public function toon()
     {
         $this->query = $this->haalSoorten();

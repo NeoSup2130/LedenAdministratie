@@ -21,13 +21,20 @@ $model = new ledenModel;
                 && !empty($_GET['LidID']))
                 {
                     $row = $model->haalLid($_GET['LidID'])->fetch();
+                    if(!$row) 
+                    {
+                        alertError("Meegegeven ID is niet geldig!");
+                        exit;
+                    }
+                    $geboorteDatum = explode('-', $row['GeboorteDatum']);
+                    $geboorteDatum = $geboorteDatum[2].'/'.$geboorteDatum[1].'/'.$geboorteDatum[0];
                     ?>
                     <td> 
-                        <input type="text" name="Naam" id="Naam" value="<?echo $row['Naam']?>">
+                        <input type="text" name="Naam" id="Naam" value="<?echo $row['Naam']?>" pattern="^(?!^\s+$)[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$" required>
                     </td>
                     <td><?echo $row['Achternaam']?></td>
                     <td>
-                        <input type="text" name="GeboorteDatum" id="GeboorteDatum" value="<?echo $row['GeboorteDatum']?>">
+                        <input type="text" name="GeboorteDatum" id="GeboorteDatum" value="<?echo $geboorteDatum?>" pattern="^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\d{4}$" required>
                     </td>
                     <td><?echo $row['Adres']?></td>
                     <td><?echo $row['Aangemaakt']?></td>

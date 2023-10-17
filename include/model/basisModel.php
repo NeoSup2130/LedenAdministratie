@@ -1,5 +1,7 @@
 <?php
 include_once "include/basis.php";
+// Model bevat het minimale wat alle Model klassen moeten beschikken om een werkende CRUD omgeving te creeeren.
+// Waaronder het versimpelen van queries maken, weergeven en handelingen m.b.v. ToonCRUDKnop.
 abstract class Model extends Database
 {
     protected $query;
@@ -37,6 +39,7 @@ abstract class Model extends Database
         }
     }
 
+    // Voor gemakt rondom testen en weergeven van SQL queries
     public static function toonSimpelQuery($query)
     {
         while ($row = $query->fetch())
@@ -50,7 +53,7 @@ abstract class Model extends Database
         }
     }
 
-    public function toonKnopCRUD($methode = 'verwijderen', $identifier = ['NAME', 'ID'], $request='post')
+    public function toonKnopCRUD($methode = 'verwijderen', $identifier = ['NAME', 'VALUE'], $request='post')
     {
         echo '<td><form action="index.php" method="'.$request.'">'; 
         echo '<input type="hidden" name="pagina" value='.urlencode($_GET['pagina']).'>';
@@ -60,21 +63,6 @@ abstract class Model extends Database
             echo '<input type="hidden" name="'.$identifier[$i].'" value='.$identifier[$i + 1].'>';
         }
         echo'<input type="submit" value="'.$methode.'" class="btn"></form></td>';
-    }
-
-    public function getTabelData()
-    {
-        $result = '';
-        if($row =$this->query->fetch())
-        {
-            $result = $result.'<tr>';
-            foreach($row as $item)
-            {
-                $result = $result.'<td>'.$item.'</td>';
-            }
-            $result = $result.'</tr>';
-        }
-        return $result;
     }
 }
 

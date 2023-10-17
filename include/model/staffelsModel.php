@@ -20,7 +20,7 @@ class StaffelsModel extends Model
 
     public function haalBoekJaarStaffel($ID, $BoekID) 
     {
-        $sql = "SELECT * FROM `contributie` WHERE ID=? AND BoekjaarID=?;";
+        $sql = "SELECT ID FROM `contributie` WHERE `contributie`.SoortID=? AND `contributie`.BoekjaarID=?;";
         return $this->doQuery($sql, [$ID, $BoekID]);
     }
 
@@ -41,6 +41,16 @@ class StaffelsModel extends Model
     {
         $sql = "DELETE FROM `contributie` WHERE ID=?";
         return $this->doQuery($sql, [$ID]);
+    }
+
+    public static function haalRegex($key)
+    {
+        switch($key)
+        {
+            case "Jaar": return "/^\d{4}$/"; break;
+            case "Leeftijd": return "/^(?:[1-9][0-9]?|100)$/"; break;
+            case "Korting": return "/^\d{1,2}(.\d{1,2})?$/"; break;
+        }
     }
 
     public function toon()

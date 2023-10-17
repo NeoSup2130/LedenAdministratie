@@ -1,4 +1,5 @@
 <?php 
+// Database bevat het minimale om de gehele CRUD binnen de website samen te binden onder één interface.
 class Database
 {
     private $servername = 'localhost'; 
@@ -19,17 +20,18 @@ class Database
         } 
         catch (PDOException $e) 
         {
-            die("Database connection failed: " . $e->getMessage());
+            die("Database connectie mislukt: " . $e->getMessage());
         }
         return $conn;
     }
-    public function alertQueryError()
-    {
-        ?><script>window.alert("<?echo $_SESSION['PDO_ERROR']->getMessage()?>")</script> <?
-    }
-    public function alertError($error="test")
-    {
-        ?><script>window.alert("<?echo $error?>")</script> <?
-    }
+}
+
+function alertQueryError()
+{
+    ?><script>window.alert("<?echo $_SESSION['PDO_ERROR']->getMessage()?>")</script> <?
+}
+function alertError($error="test")
+{
+    ?><script>window.alert("<?echo $error?>")</script> <?
 }
 ?>

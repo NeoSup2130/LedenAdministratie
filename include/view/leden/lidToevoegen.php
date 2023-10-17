@@ -11,7 +11,7 @@ if (isset($_GET['familieID'])
 {
     $famID = $_GET['familieID'];
     if (!$famData = $famModel->haalFamilie($famID))
-        $this->alertQueryError();
+        alertQueryError();
 }
 ?>
 <h2>U gaat nu een familie lid toevoegen: </h2>
@@ -35,7 +35,7 @@ if (isset($_GET['familieID'])
                     </td>
                     <td><?echo $row['Naam']?></td>
                     <td>
-                        <input type="text" name="GeboorteDatum" id="GeboorteDatum" pattern="^\d{2}/\d{2}}/\d{4}$" required>
+                        <input type="text" name="GeboorteDatum" id="GeboorteDatum" pattern="^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\d{4}$" required>
                     </td>
                     <td><?echo $row['Adres']?></td>
                     <input type="hidden" name="FamilieID" id="FamilieID" value="<?echo $row['ID']?>">

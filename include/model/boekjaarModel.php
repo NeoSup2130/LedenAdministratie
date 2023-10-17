@@ -25,7 +25,7 @@ class BoekjaarModel extends Model
         $result = null;
         if (!$result = $this->doQuery($sql))
         {
-            $this->alertQueryError();
+            alertQueryError();
         }
         return $result->fetch()['ID'];
     }
@@ -34,10 +34,10 @@ class BoekjaarModel extends Model
     {
         $fetchSQL = "SELECT `soort lid`.ID, `contributie`.Leeftijd, contributie.Korting, contributie.Bedrag FROM `soort lid` 
         JOIN contributie ON `soort lid`.ID=contributie.SoortID
-        WHERE contributie.BoekjaarID=?";
+        WHERE contributie.BoekjaarID=? ORDER BY contributie.Leeftijd;";
         if (!$result = $this->doQuery($fetchSQL, [$boekID]))
         {
-            $this->alertQueryError();
+            alertQueryError();
         }
         return $result;
     }
@@ -62,7 +62,7 @@ class BoekjaarModel extends Model
         {
             if (!$this->doQuery($cascaseSQL, [$boekID, $staffel['ID'], $staffel['Leeftijd'], $staffel['Korting'], $basisbedrag]))
             {
-                $this->alertQueryError();
+                alertQueryError();
                 return false;
             }      
         }    
@@ -76,7 +76,7 @@ class BoekjaarModel extends Model
         {
             if (!$this->doQuery($cascaseSQL, [$boekID, $staffel['ID'], $staffel['Leeftijd'], $staffel['Korting'], $basisbedrag]))
             {
-                $this->alertQueryError();
+                alertQueryError();
                 return false;
             }      
         }
@@ -91,7 +91,7 @@ class BoekjaarModel extends Model
         $sql = "INSERT INTO boekjaar (Jaar) VALUES (?)";
         if (!$this->doQuery($sql, [$jaar]))
         {
-            $this->alertQueryError();
+            alertQueryError();
         }
 
         $boekID = $this->haalLaatsteJaar();
@@ -114,6 +114,15 @@ class BoekjaarModel extends Model
     {
         $sql = "DELETE FROM boekjaar WHERE ID=?";
         return $this->doQuery($sql, [$ID]);
+    }
+
+    public static function haalRegex($key)
+    {
+        switch($key)
+        {
+            case "Jaar": return "/^\d{4}$/"; break;
+            case "BasisBedrag": return "/^\d+(.\d{1,2})?$/"; break;
+        }
     }
 
     public function toon()

@@ -8,13 +8,12 @@ if (isset($_GET['familieID']) && is_numeric(htmlspecialchars($_GET['familieID'])
     $famID = $_GET['familieID'];
     if (!$famData = $model->haalLedenFamilie($famID))
     {
-        $this->alertQueryError();
+        alertQueryError();
     }
     $famData = $famData->fetchAll();
 
     if (empty($famData)) 
     {
-        header("index.php");
         ?><h2>Familie bevat geen familie leden!</h2> <?
         exit;
     }

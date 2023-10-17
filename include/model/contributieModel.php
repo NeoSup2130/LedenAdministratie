@@ -15,13 +15,13 @@ class ContributieModel extends Model
             $sql = "SELECT * FROM `contributie` WHERE 1 ORDER BY BoekjaarID DESC LIMIT 1;";
             if (!$boekjaar = $this->doQuery($sql))
             {
-                $this->alertQueryError();
+                alertQueryError();
                 exit;
             }
             $boekjaar = $boekjaar->fetch()['BoekjaarID'];
         }
         
-        $sql = "SELECT * FROM contributie WHERE BoekjaarID=?;";
+        $sql = "SELECT * FROM contributie WHERE BoekjaarID=? ORDER BY contributie.Leeftijd;";
         return $this->doQuery($sql, [$boekjaar]);
     }
 
@@ -49,7 +49,7 @@ class ContributieModel extends Model
         return $this->doQuery($sql, [$ID]);
 
     }
-
+    
     public function toon()
     {
         $this->query = $this->haalContributies();

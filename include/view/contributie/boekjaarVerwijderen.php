@@ -17,6 +17,11 @@ $model = new BoekjaarModel;
                 if (isset($_GET['BoekjaarID']) && is_numeric(htmlspecialchars($_GET['BoekjaarID'])))
                 {
                     $row = $model->haalBoekjaar($_GET['BoekjaarID'])->fetch();
+                    if(!$row) 
+                    {
+                        alertError("Meegegeven ID is niet geldig!");
+                        exit;
+                    }
                     ?>
                     <td><?echo $row['ID']?></td>
                     <td><?echo $row['Jaar']?></td>

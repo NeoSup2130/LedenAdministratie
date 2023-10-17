@@ -22,6 +22,11 @@ $model = new ledenModel;
                     && !empty($_GET['LidID']))
                 {
                     $row = $model->haalLid($_GET['LidID'])->fetch();
+                    if(!$row) 
+                    {
+                        alertError("Meegegeven ID is niet geldig!");
+                        exit;
+                    }
                     ?>
                     <td><?echo $row['Naam']?></td>
                     <td><?echo $row['Achternaam']?></td>

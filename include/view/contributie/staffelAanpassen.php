@@ -22,6 +22,11 @@ $boekjaarModel = new BoekjaarModel;
                 if (isset($_GET['StaffelID']) && is_numeric(htmlspecialchars($_GET['StaffelID'])))
                 {
                     $row = $staffelModel->haalStaffel($_GET['StaffelID'])->fetch();
+                    if(!$row) 
+                    {
+                        alertError("Meegegeven ID is niet geldig!");
+                        exit;
+                    }
                     $boekjaren = $boekjaarModel->haalBoekjaar($row['BoekjaarID'])->fetch();
                     $soorten = $soortModel->haalSoorten()->fetchAll();
 

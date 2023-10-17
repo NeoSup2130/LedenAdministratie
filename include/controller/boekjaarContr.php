@@ -1,8 +1,10 @@
 <?php 
-require_once "include/basis.php";
+require_once "include/controller/basisContr.php";
 include_once "include/model/boekjaarModel.php";
 
-class BoekjaarContr extends Database
+// BoekjaarContr heeft verantwoordelijkheid over het weergeven van het boekjaar view en het handelen van client input.
+// Rondom de volgende tabel Boekjaar
+class BoekjaarContr extends Controller
 {
     protected function handelPOST()
     {
@@ -12,18 +14,32 @@ class BoekjaarContr extends Database
             switch($_POST['methode'])
             {
                 case "toevoegen":
-                    $jaar = htmlspecialchars($_POST['BoekJaar']);
-                    $bedrag = str_replace(',','.', htmlspecialchars($_POST['BasisBedrag']));
-                    if (!$model->toevoegenBoekjaar($jaar, $bedrag))
-                    $this->alertQueryError();
+                    $filter = new Validator();
+                    $filter->AddFilter('BoekJaar', BoekjaarModel::haalRegex('Jaar'));
+                    $filter->AddFilter('BasisBedrag', BoekjaarModel::haalRegex('BasisBedrag'));
+                    $data = $filter->Validate();
+                    if(!$data) break;
+                    $bedrag = str_replace(',','.', htmlspecialchars($data['BasisBedrag']));
+                    if (!$model->toevoegenBoekjaar($data['BoekJaar'], $bedrag))
+                    alertQueryError();
                 break;
                 case "aanpassen":
-                    if (!$model->aanpassenBoekjaar($_POST['BoekjaarID'], $_POST['Jaar']))
-                    $this->alertQueryError();
+                    if ($this->ValideerID([$_POST['BoekjaarID']]))
+                    {
+                        $filter = new Validator();
+                        $filter->AddFilter('BoekJaar', BoekjaarModel::haalRegex('Jaar'));
+                        $data = $filter->Validate();
+                        if(!$data) break;
+                        if (!$model->aanpassenBoekjaar($_POST['BoekjaarID'], $data['Jaar']))
+                            alertQueryError();
+                    }
                 break;
                 case "verwijderen":
-                    if (!$model->verwijderBoekjaar($_POST['BoekjaarID']))
-                    $this->alertQueryError();
+                    if ($this->ValideerID([$_POST['BoekjaarID']]))
+                    {
+                        if (!$model->verwijderBoekjaar($_POST['BoekjaarID']))
+                            alertQueryError();
+                    }
                 break;
             }
             header('refresh:0');
@@ -46,26 +62,6 @@ class BoekjaarContr extends Database
             return true;
         } 
         return false;
-    }
-
-    public function invoke()
-    {
-        if(isset($_SERVER['REQUEST_METHOD']))
-        {
-            switch($_SERVER['REQUEST_METHOD'])
-            {
-                case 'POST': 
-                    $this->handelPOST();
-                    break;
-                    case 'GET':
-                        if (!$this->handelGET())
-                            $this->toonAlles(); 
-                        break;
-                default:
-                var_dump($_SERVER['REQUEST_METHOD']);
-                    break;
-            }
-        } 
     }
 
     protected function toonAlles()
