@@ -5,7 +5,7 @@
     include_once "include/controller/userContr.php";
     
     $userController = new AdminUserContr();
-
+    // Als gebruiker niet ingelogd/bekend is bij onze sessie. Weergeef login pagina.
     if (!isset($_SESSION['GebruikerID'])) 
     {
         $userController->ToonLogin();
@@ -18,7 +18,8 @@
         {
             $_GET['pagina'] = "overzicht";
         }
-
+        // Weergeef de correcte pagina gebasseerd op de meegekregen URL 
+        // Voorbeeld www.home.nl?pagina=hello+world -> laat pagina start zien.
         switch(urldecode($_GET['pagina']))
         {
             case "overzicht":
@@ -35,7 +36,7 @@
                 $ledenController = new LedenContr();
                 $ledenController->invoke();
                 break;
-                case "contributie": // weergeef boekjaar crud -> maak boekjaar creeert ook de correct staffels
+                case "contributie": 
                 include_once "include/controller/boekjaarContr.php";
                 $boekjaarController = new BoekjaarContr();
                 $boekjaarController->invoke();

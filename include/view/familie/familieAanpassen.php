@@ -24,9 +24,13 @@ $model = new familieModel;
                         alertError("Meegegeven ID is niet geldig!");
                         exit;
                     }
+                    // $row['Adres'] komt binnen als "1234AB, ErgensStraat 10b"
                     $adres = explode(', ', $row['Adres']);
+                    // adres = ["1234AB", "ErgensStraat 10b"]
                     $postcode = $adres[0];
+                    // Vind de dichtsbijzijnde nummer in adres[1] ("ErgensStraat 10b")
                     $nrPos = strcspn($adres[1], "123456789");
+                    // nrPos is * in dit voorbeeld -> "ErgensStraat*10b"
                     $huisnr = substr($adres[1], $nrPos);
                     $straat = substr($adres[1], 0, $nrPos-1);
                     ?>

@@ -144,6 +144,7 @@ class AdminUserContr extends AdminUser
 
     public function ToonLogin()
     {
+        // Deze variable wordt gebruikt in "include/view/gebruiker/login.php"
         $loginFout = false;
 
         if(isset($_POST['gebruiker']) && isset($_POST['wachtwoord']))

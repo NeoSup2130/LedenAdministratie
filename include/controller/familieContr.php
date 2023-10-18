@@ -6,7 +6,6 @@ include_once "include/model/familieModel.php";
 // Rondom de volgende tabel Familie
 class FamilieContr extends Controller
 {
-
     protected function handelPOST()
     {
         if(isset($_POST['methode']))

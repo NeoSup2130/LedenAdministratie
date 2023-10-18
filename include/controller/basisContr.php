@@ -16,7 +16,7 @@ class Validator {
         $this->filters[$key] = array('filter' => FILTER_VALIDATE_REGEXP,
         'options' => array('regexp' => $regex));    
     }
-
+    // Gebruikt met AddFilter om POST of GET variabelen te valideren 
     public function Validate()
     {
         $data = filter_input_array($this->type, $this->filters);
@@ -42,7 +42,7 @@ abstract class Controller extends Database
         if (empty($ids)) return false;
         if (!is_array($ids)) 
         {
-            echo "array is required! for ValideerID!s";
+            alertError("array is nodig voor ValideerID!s");
             return false;
         }
         foreach($ids as &$id)

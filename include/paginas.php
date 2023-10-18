@@ -1,5 +1,5 @@
 <?php 
-
+// PaginaManager wordt gebruikt om de nav te creeeren.
 class PaginaManager
 {
     protected $paginas = array();
