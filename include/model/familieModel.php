@@ -14,14 +14,14 @@ class familieModel extends Model
         return $this->doQuery($sql, [$ID]);
     }
 
-    public function haalLedenFamilie($familieID)
+    public function haalLedenFamilie($FamilieID)
     {
         $sql = "SELECT FamilieID, LidID, `familie lid`.`Naam`, familie.Naam as Achternaam, `GeboorteDatum`, `soort lid`.`Soort`, Adres, 
         `familie lid`.Aangemaakt, `familie lid`.Aangepast 
         FROM `familie lid` JOIN familie on `familie lid`.`FamilieID` = familie.ID 
         JOIN `soort lid` ON `soort lid`.`ID` = `familie lid`.`SoortID`
         WHERE FamilieID=? ORDER BY `familie lid`.`Naam`;";
-        return $this->doQuery($sql, [$familieID]);
+        return $this->doQuery($sql, [$FamilieID]);
     }
 
     public function toevoegenFamilie($naam, $adres) 
@@ -49,7 +49,7 @@ class familieModel extends Model
             case "Naam": return "/^(?!^\s+$)[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/"; break;
             case "Postcode": return "/^[1-9]\d{3}[A-Z]{2}$/"; break;
             case "Straat": return "/^[A-Za-z\s-]+$/"; break;
-            case "Huisnummer": return "/^[1-9]\d*\w?$/"; break;
+            case "Huisnummer": return "/^([1-9]\d*|[1-9])?\w?$/"; break;
         }
     }
 
@@ -72,10 +72,10 @@ class familieModel extends Model
                 else echo '<td>'.$item.'</td>';
             }
 
-            $this->toonKnopCRUD('lid toevoegen', ['familieID', $id], 'get');
-            $this->toonKnopCRUD("leden bekijken", ['familieID', $id], 'get');
-            $this->toonKnopCRUD("aanpassen", ['familieID', $id], 'get');
-            $this->toonKnopCRUD("verwijderen", ['familieID', $id], 'get');
+            $this->toonKnopCRUD('lid toevoegen', ['FamilieID', $id], 'get');
+            $this->toonKnopCRUD("leden bekijken", ['FamilieID', $id], 'get');
+            $this->toonKnopCRUD("aanpassen", ['FamilieID', $id], 'get');
+            $this->toonKnopCRUD("verwijderen", ['FamilieID', $id], 'get');
         echo '</tr>';
         }
     } 

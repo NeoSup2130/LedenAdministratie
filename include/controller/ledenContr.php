@@ -107,7 +107,7 @@ class LedenContr extends Controller
             }
             return true;
         } 
-        else if (isset($_GET['familieID']))
+        else if (isset($_GET['FamilieID']))
         {
             include_once "include/view/leden/ledenFamilieOverzicht.php";
             return true;

@@ -16,9 +16,9 @@ $model = new familieModel;
                 </tr>
                 <tr>
                 <?
-                if (isset($_GET['familieID']) && is_numeric(htmlspecialchars($_GET['familieID'])))
+                if (isset($_GET['FamilieID']) && is_numeric(htmlspecialchars($_GET['FamilieID'])))
                 {
-                    $row = $model->haalFamilie($_GET['familieID'])->fetch();
+                    $row = $model->haalFamilie($_GET['FamilieID'])->fetch();
                     if(!$row) 
                     {
                         alertError("Meegegeven ID is niet geldig!");
@@ -26,21 +26,21 @@ $model = new familieModel;
                     }
                     $adres = explode(', ', $row['Adres']);
                     $postcode = $adres[0];
-                    $adres = explode(' ', $adres[1]);
-                    $huisnr = $adres[1];
-                    $straat = $adres[0];
+                    $nrPos = strcspn($adres[1], "123456789");
+                    $huisnr = substr($adres[1], $nrPos);
+                    $straat = substr($adres[1], 0, $nrPos-1);
                     ?>
                     <td> 
                         <input type="text" name="Naam" id="Naam" value="<?echo $row['Naam']?>" pattern="^(?!^\s+$)[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$" required>
                     </td>
                     <td><input type="text" name="Postcode" id="Postcode" value="<?echo $postcode?>" pattern="^[1-9]\d{3}[A-Z]{2}$" required></td>
                     <td><input type="text" name="Straat" id="Straat" value="<?echo $straat?>" pattern="^[A-Za-z\s-]+$" required></td>
-                    <td><input type="text" name="Huisnummer" id="Huisnummer" value="<?echo $huisnr?>" pattern="^[1-9]\d*\w?$" required></td>
+                    <td><input type="text" name="Huisnummer" id="Huisnummer" value="<?echo $huisnr?>" pattern="^([1-9]\d*|[1-9])?\w?$" required></td>
             
                     <td><?echo $row['Aangemaakt']?></td>
                     <td><?echo $row['Aangepast']?></td>
                         <input type="hidden" name="Aangepast" id="Aangepast">
-                        <input type="hidden" name="familieID" id="familieID" value="<?echo $_GET['familieID']?>">
+                        <input type="hidden" name="FamilieID" id="FamilieID" value="<?echo $_GET['FamilieID']?>">
                         <input type="hidden" name="methode" value="<?echo $_GET['methode']?>">
                     <?
                 }

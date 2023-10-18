@@ -3,9 +3,9 @@ include_once 'include/view/template.php';
 toonBeginPagina("Familieleden overzicht - Sportclub de Cuijt");
 $model = new ledenModel;
 $famData;
-if (isset($_GET['familieID']) && is_numeric(htmlspecialchars($_GET['familieID'])))
+if (isset($_GET['FamilieID']) && is_numeric(htmlspecialchars($_GET['FamilieID'])))
 {
-    $famID = $_GET['familieID'];
+    $famID = $_GET['FamilieID'];
     if (!$famData = $model->haalLedenFamilie($famID))
     {
         alertQueryError();

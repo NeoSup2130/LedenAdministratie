@@ -20,7 +20,7 @@ $model = new familieModel;
             <td><input type="text" name="Naam" id="Naam" placeholder="Familie Naam" pattern="^(?!^\s+$)[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$" required></td>
             <td><input type="text" name="Postcode" id="Postcode" placeholder="Postcode" pattern="^[1-9]\d{3}[A-Z]{2}$" required></td>
             <td><input type="text" name="Straat" id="Straat" placeholder="Straat" pattern="^[A-Za-z\s-]+$" required></td>
-            <td><input type="text" name="Huisnummer" id="Huisnummer" placeholder="Huisnummer" pattern="^[1-9]\d*\w?$" required></td>
+            <td><input type="text" name="Huisnummer" id="Huisnummer" placeholder="Huisnummer" pattern="^([1-9]\d*|[1-9])?\w?$" required></td>
             <input type="hidden" name="methode" value="toevoegen">
             <td><input type="submit" value="toevoegen" class="btn"></td>
             </form>

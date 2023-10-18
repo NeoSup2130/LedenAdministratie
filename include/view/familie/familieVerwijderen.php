@@ -16,9 +16,9 @@ $model = new familieModel;
                 </tr>
                 <tr>
                 <?
-                if (isset($_GET['familieID']) && is_numeric(htmlspecialchars($_GET['familieID'])))
+                if (isset($_GET['FamilieID']) && is_numeric(htmlspecialchars($_GET['FamilieID'])))
                 {
-                    $row = $model->haalFamilie($_GET['familieID'])->fetch();
+                    $row = $model->haalFamilie($_GET['FamilieID'])->fetch();
                     if(!$row) 
                     {
                         alertError("Meegegeven ID is niet geldig!");
@@ -29,7 +29,7 @@ $model = new familieModel;
                     <td><?echo $row['Adres']?></td>
                     <td><?echo $row['Aangemaakt']?></td>
                     <td><?echo $row['Aangepast']?></td>
-                        <input type="hidden" name="familieID" id="familieID" value="<?echo $_GET['familieID']?>">
+                        <input type="hidden" name="FamilieID" id="FamilieID" value="<?echo $_GET['FamilieID']?>">
                         <input type="hidden" name="methode" value="<?echo $_GET['methode']?>">
                     <?
                 }
@@ -42,7 +42,7 @@ $model = new familieModel;
         </table>
 </form>
         <?
-        if ($famData = $model->haalLedenFamilie($_GET['familieID'])->fetchAll())
+        if ($famData = $model->haalLedenFamilie($_GET['FamilieID'])->fetchAll())
         {
             if (!empty($famData))
             {

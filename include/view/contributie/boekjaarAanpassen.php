@@ -20,7 +20,7 @@ $model = new BoekjaarModel;
                         <?echo $row['ID']?>
                     </td>
                     <td>
-                        <input type="number" name="Jaar" id="Jaar" step=1 min=1900 max=2100 value="<?echo $row['Jaar']?>">
+                        <input type="number" name="BoekJaar" id="BoekJaar" step=1 min=1900 max=2100 value="<?echo $row['Jaar']?>">
                     </td>
                         <input type="hidden" name="BoekjaarID" id="BoekjaarID" value="<?echo $row['ID']?>">
                         <input type="hidden" name="methode" value="<?echo $_GET['methode']?>">

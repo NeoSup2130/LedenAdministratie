@@ -56,7 +56,7 @@ class StaffelsContr extends Controller
                         $filter = new Validator();
                         $filter->AddFilter('Leeftijd', StaffelsModel::haalRegex('Leeftijd'));
                         $filter->AddFilter('Korting', StaffelsModel::haalRegex('Korting'));
-                        $filter->AddFilter('Bedrag', BoekjaarModel::haalRegex('Bedrag'));
+                        $filter->AddFilter('BasisBedrag', BoekjaarModel::haalRegex('BasisBedrag'));
                         $data = $filter->Validate();
                         if(!$data) break;
                         if ($this->controleerToevoeging()) 
@@ -68,16 +68,16 @@ class StaffelsContr extends Controller
                     }
                 break;
                 case "aanpassen":
-                    if ($this->ValideerID([$_POST['ID'], $_POST['BoekID'], $_POST['SoortID']]))
+                    if ($this->ValideerID([$_POST['StaffelID'], $_POST['BoekID'], $_POST['SoortID']]))
                     {
                         if($this->isEmptySoortID() || $this->isEmptyBoekID()) break;
                         $filter = new Validator();
                         $filter->AddFilter('Leeftijd', StaffelsModel::haalRegex('Leeftijd'));
                         $filter->AddFilter('Korting', StaffelsModel::haalRegex('Korting'));
-                        $filter->AddFilter('Bedrag', BoekjaarModel::haalRegex('BasisBedrag'));
+                        $filter->AddFilter('BasisBedrag', BoekjaarModel::haalRegex('BasisBedrag'));
                         $data = $filter->Validate();
                         if(!$data) break;
-                        if (!$staffelModel->aanpassenStaffel($_POST['ID'], $_POST['BoekID'], $_POST['SoortID'], $data['Leeftijd'], $data['Korting'], $data['Bedrag']))
+                        if (!$staffelModel->aanpassenStaffel($_POST['StaffelID'], $_POST['BoekID'], $_POST['SoortID'], $data['Leeftijd'], $data['Korting'], $data['BasisBedrag']))
                         alertQueryError();
                     }
                 break;

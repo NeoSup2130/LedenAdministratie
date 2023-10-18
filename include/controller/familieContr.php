@@ -37,14 +37,14 @@ class FamilieContr extends Controller
                         $data = $filter->Validate();
                         if(!$data) break;                    
                         $adres = $data['Postcode'].', '.$data['Straat'].' '.$data['Huisnummer'];
-                        if (!$model->aanpassenFamilie($_POST['familieID'], $data['Naam'], $adres))
+                        if (!$model->aanpassenFamilie($_POST['FamilieID'], $data['Naam'], $adres))
                         alertQueryError();
                     }
                 break;
                 case "verwijderen":
                     if ($this->ValideerID([$_POST['FamilieID']]))
                     {
-                        if (!$model->verwijderFamilie($_POST['familieID']))
+                        if (!$model->verwijderFamilie($_POST['FamilieID']))
                         alertQueryError();
                     }
                 break;
@@ -60,11 +60,11 @@ class FamilieContr extends Controller
             switch($_GET['methode'])
             {
                 case "lid toevoegen":
-                    header('location: index.php?pagina=familie+leden&familieID='.$_GET['familieID'].'&methode=toevoegen');
+                    header('location: index.php?pagina=familie+leden&FamilieID='.$_GET['FamilieID'].'&methode=toevoegen');
                     exit;
                 break;
                 case "leden bekijken":
-                    header('location: index.php?pagina=familie+leden&familieID='.$_GET['familieID'].'');
+                    header('location: index.php?pagina=familie+leden&FamilieID='.$_GET['FamilieID'].'');
                     exit;
                 break;
                 case "aanpassen":

@@ -30,7 +30,7 @@ class BoekjaarContr extends Controller
                         $filter->AddFilter('BoekJaar', BoekjaarModel::haalRegex('Jaar'));
                         $data = $filter->Validate();
                         if(!$data) break;
-                        if (!$model->aanpassenBoekjaar($_POST['BoekjaarID'], $data['Jaar']))
+                        if (!$model->aanpassenBoekjaar($_POST['BoekjaarID'], $data['BoekJaar']))
                             alertQueryError();
                     }
                 break;

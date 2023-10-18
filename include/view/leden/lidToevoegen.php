@@ -5,11 +5,11 @@ toonBeginPagina("Familie lid toevoegen - Sportclub de Cuijt");
 $lidModel = new ledenModel;
 $famModel = new familieModel;
 $famID; $famData;
-if (isset($_GET['familieID'])
-    && is_numeric(htmlspecialchars($_GET['familieID']))
-    && !empty($_GET['familieID']))
+if (isset($_GET['FamilieID'])
+    && is_numeric(htmlspecialchars($_GET['FamilieID']))
+    && !empty($_GET['FamilieID']))
 {
-    $famID = $_GET['familieID'];
+    $famID = $_GET['FamilieID'];
     if (!$famData = $famModel->haalFamilie($famID))
         alertQueryError();
 }
